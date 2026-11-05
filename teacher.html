@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Teacher · Speed Math</title><link rel="stylesheet" href="style.css">
+<style>table{width:100%;border-collapse:collapse;min-width:560px}th,td{border-bottom:1px solid var(--line);padding:8px;text-align:left}th{font-size:.9rem}.wrap{overflow-x:auto}td button{padding:4px 10px;box-shadow:none}</style></head>
+<body><main>
+<div class="bar"><a class="btn ghost" href="index.html">← Student site</a></div>
+<h1>Teacher area</h1>
+
+<div class="card" id="login">
+<p class="sub">Log in, or create a teacher account with the teacher code.</p>
+<label for="name">Teacher name</label><input id="name" autocomplete="username">
+<label for="pw">Password (6+ characters)</label><input id="pw" type="password" autocomplete="current-password">
+<label for="code">Teacher code (only needed to create an account)</label><input id="code" type="password">
+<p class="err" id="err"></p>
+<button id="in">Log in</button> <button class="ghost" id="up">Create teacher account</button></div>
+
+<div class="hide" id="dash">
+<div class="bar"><span>Welcome, <b id="hi"></b></span><button class="ghost" id="out">Log out</button></div>
+<p class="sub">Best scores per level (1 / 2 / 3) for students on this device.</p>
+<div class="card wrap"><table><thead><tr><th>Student</th><th>+</th><th>−</th><th>×</th><th>÷</th><th>Games</th><th>Last</th><th></th></tr></thead><tbody id="rows"></tbody></table></div>
+</div></main><script src="app.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+function render(){
+  const t=teacherNow();$('login').classList.toggle('hide',!!t);$('dash').classList.toggle('hide',!t);if(!t)return;
+  $('hi').textContent=t.name;const u=users(),keys=Object.keys(u);
+  $('rows').innerHTML=keys.map(k=>{const p=u[k],b=o=>[1,2,3].map(l=>p.best[o+l]||0).join(' / ');
+    return`<tr><td>${esc(p.name)}</td><td>${b('add')}</td><td>${b('sub')}</td><td>${b('mul')}</td><td>${b('div')}</td><td>${p.history.length}</td><td>${p.history[0]?p.history[0].date:'–'}</td><td><button class="ghost" data-k="${esc(k)}">Remove</button></td></tr>`}).join('')
+    ||'<tr><td colspan="8">No students have signed up on this device yet.</td></tr>';
+}
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+$('rows').addEventListener('click',e=>{const k=e.target.dataset.k;if(!k)return;
+  if(confirm('Remove this student and all their scores?')){const u=users();delete u[k];store.set('sm_users',u);render()}});
+const go=c=>{const e=teacherLogin($('name').value,$('pw').value,c?$('code').value:null);$('err').textContent=e;if(!e)render()};
+$('in').onclick=()=>go(false);$('up').onclick=()=>go(true);$('out').onclick=teacherLogout;
+render();
+</script></body></html>

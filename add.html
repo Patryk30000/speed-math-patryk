@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Addition · Speed Math</title><link rel="stylesheet" href="style.css"></head>
+<body><main>
+<div class="bar"><a class="btn ghost" href="index.html">← Menu</a><span>Player: <b id="who"></b></span></div>
+<h1>+ Addition</h1><p class="sub">Answer as many as you can in 60 seconds. Press Enter after each answer.</p>
+<div class="card" id="setup">
+<label for="level">Level</label>
+<select id="level"><option value="1">1 – Easy</option><option value="2">2 – Medium</option><option value="3">3 – Hard</option></select>
+<p>Your best on this level: <b id="best">0</b></p>
+<button id="go">Start</button></div>
+<div class="card hide" id="play">
+<div class="stats"><div class="stat"><b id="time">60</b>seconds</div><div class="stat"><b id="score">0</b>correct</div><div class="stat"><b id="streak">0</b>streak</div></div>
+<div id="timebar"><div id="timefill"></div></div>
+<div id="q"></div>
+<input id="ans" type="number" inputmode="numeric" autocomplete="off" aria-label="Your answer"></div>
+<div class="card hide" id="result"><h1 id="final"></h1><p id="detail"></p>
+<button id="again">Play again</button> <a class="btn ghost" href="index.html">Menu</a></div>
+</main><script src="app.js"></script><script>startGame('add')</script></body></html>

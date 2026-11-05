@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Speed Math</title><link rel="stylesheet" href="style.css"></head>
+<body><main>
+<h1>Speed Math</h1><p class="sub">60 seconds. How many can you get?</p>
+
+<div class="card" id="login">
+<label for="name">Name</label><input id="name" autocomplete="username">
+<label for="pin">4-digit PIN</label><input id="pin" type="password" inputmode="numeric" maxlength="4" autocomplete="current-password">
+<p class="err" id="err"></p>
+<button id="in">Log in</button> <button class="ghost" id="up">Create account</button>
+<p class="sub" style="margin-top:14px">Accounts and scores are saved on this device only.</p>
+<a href="teacher.html">Teacher login</a></div>
+
+<div class="hide" id="menu">
+<div class="bar"><span>Hi, <b id="hi"></b></span><button class="ghost" id="out">Log out</button></div>
+<div class="grid">
+<a class="op" href="add.html"><b>+</b><span>Addition</span><small id="b-add"></small></a>
+<a class="op" href="sub.html"><b>−</b><span>Subtraction</span><small id="b-sub"></small></a>
+<a class="op" href="mul.html"><b>×</b><span>Multiplication</span><small id="b-mul"></small></a>
+<a class="op" href="div.html"><b>÷</b><span>Division</span><small id="b-div"></small></a></div>
+<div class="card"><b>Recent games</b><ol id="hist"></ol></div></div>
+</main><script src="app.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+function render(){
+  const p=me();$('login').classList.toggle('hide',!!p);$('menu').classList.toggle('hide',!p);if(!p)return;
+  $('hi').textContent=p.name;
+  for(const o in OPS){const v=[1,2,3].map(l=>p.best[o+l]||0);$('b-'+o).textContent='Best: '+v.join(' / ')}
+  $('hist').innerHTML=p.history.slice(0,8).map(h=>`<li>${OPS[h.op].name}, level ${h.level}: <b>${h.score}</b> (${h.date})</li>`).join('')||'<li>No games yet. Pick an operation!</li>';
+}
+const go=c=>{const e=login($('name').value,$('pin').value,c);$('err').textContent=e;if(!e)render()};
+$('in').onclick=()=>go(false);$('up').onclick=()=>go(true);$('out').onclick=logout;
+$('pin').addEventListener('keydown',e=>{if(e.key==='Enter')go(false)});
+render();
+</script></body></html>
