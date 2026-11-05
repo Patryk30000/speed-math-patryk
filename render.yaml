@@ -1,0 +1,17 @@
+databases:
+  - name: speedmath-db
+    plan: free
+services:
+  - type: web
+    name: speedmath
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase: {name: speedmath-db, property: connectionString}
+      - key: JWT_SECRET
+        generateValue: true
+      - key: NODE_ENV
+        value: production
